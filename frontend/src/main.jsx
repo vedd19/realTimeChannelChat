@@ -6,11 +6,18 @@ import { BrowserRouter, createBrowserRouter, RouterProvider } from 'react-router
 import { Login } from './pages/Login.jsx'
 import { Register } from './pages/Register.jsx'
 import { Dashboard } from './pages/Dashboard.jsx'
+import { SnackbarProvider } from 'notistack'
+import UserContextProvider from './context/UserContextProvider.jsx'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element:
+      <UserContextProvider>
+        <SnackbarProvider>
+          <App />
+        </SnackbarProvider>
+      </UserContextProvider>,
     children: [{
       path: '/',
       element: <App />
