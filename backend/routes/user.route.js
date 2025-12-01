@@ -17,5 +17,7 @@ body('password').notEmpty().withMessage('All fields are required')],
 
 router.get('/logout', userController.logoutUser)
 
+router.get('/me', authMiddleware.authMiddleware, userController.userProfile)
+
 
 module.exports = router
