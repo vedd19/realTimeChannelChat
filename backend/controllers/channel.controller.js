@@ -1,4 +1,5 @@
 const ChannelModel = require('../models/channels.model')
+const MessageModel = require('../models/messages.model')
 
 module.exports.createChannel = async (req, res) => {
 
@@ -21,9 +22,15 @@ module.exports.createChannel = async (req, res) => {
             members: [userId],
             admin: userId
         });
+
+        const messages = await MessageModel.create({
+            channel,
+            messages: [],
+        });
         res.status(201).json({
             success: true,
             data: channel,
+            messages: messages,
             message: "channel created successfully",
         })
     }
@@ -56,6 +63,26 @@ module.exports.getUserChannels = async (req, res) => {
 
 }
 
+module.exports.getUserJoinedChannels = async (req, res) => {
+
+    const { userId } = req.body;
+    try {
+        const channels = await ChannelModel.find({ members: userId })
+        res.status(200).json({
+            success: true,
+            data: channels,
+            message: "fetched joined channels successfully",
+        })
+    } catch (err) {
+        return res.status(400).json({
+            success: false,
+            data: channels,
+            message: "error fetching joined channels",
+        })
+    }
+
+}
+
 module.exports.getAllChannels = async (req, res) => {
     try {
         const allChannels = await ChannelModel.find();
@@ -67,3 +94,25 @@ module.exports.getAllChannels = async (req, res) => {
     }
 
 }
+
+module.exports.joinChannel = async (req, res) => {
+    const { userId, channelId } = req.body;
+    console.log(channelId, userId)
+    try {
+        const channel = await ChannelModel.findByIdAndUpdate(channelId,
+            { $push: { members: userId } },
+        )
+        console.log(channel)
+
+        res.status(200).json({
+            data: channel
+        })
+
+    } catch (err) {
+        return res.status(400).json({ message: 'error while joining channel' })
+    }
+
+
+
+}
+

@@ -24,6 +24,8 @@ export const UserContextProvider = ({ children }) => {
     const [myChannels, setMyChannels] = useState(null)
     const [allChannels, setAllChannels] = useState(null)
     const [channelData, setChannelData] = useState(null)
+    const [joinedChannels, setJoinedChannels] = useState(null)
+    const [joined, setJoined] = useState(false);
 
     useEffect(() => {
 
@@ -54,7 +56,34 @@ export const UserContextProvider = ({ children }) => {
         getMyChannelData()
     }, [])
 
+    useEffect(() => {
 
+        async function getJoinedChannelData() {
+            try {
+                const response = await fetch(`${config.BACKEND_URL}/api/channels/get-joined-channels`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        "Content-Type": "application/json"
+
+                    },
+
+                    body: JSON.stringify({ userId: localStorage.getItem('id') })
+                })
+
+                if (response.status === 200) {
+                    const data = await response.json();
+                    setJoinedChannels(data.data)
+                    console.log(data.data)
+                }
+
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+        getJoinedChannelData()
+    }, [])
 
     useEffect(() => {
 
@@ -89,7 +118,7 @@ export const UserContextProvider = ({ children }) => {
 
 
     return (
-        <UserDataContext.Provider value={{ userData, setUserData, loginData, setLoginData, myChannels, allChannels, channelData, setChannelData }} >
+        <UserDataContext.Provider value={{ userData, setUserData, loginData, setLoginData, myChannels, allChannels, channelData, setChannelData, joined, setJoined, setMyChannels, joinedChannels, setJoinedChannels }} >
             {children}
         </UserDataContext.Provider>
     )

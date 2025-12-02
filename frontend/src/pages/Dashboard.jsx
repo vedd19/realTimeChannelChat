@@ -8,7 +8,25 @@ import { ActiveChat } from "../components/ActiveChat";
 export const Dashboard = () => {
 
 
-    const { allChannels, channelData, setChannelData } = useContext(UserDataContext)
+    const { myChannels, setMyChannels, allChannels, channelData, setChannelData, joinedChannels, setJoined, joined } = useContext(UserDataContext)
+
+    const channelClickHandler = async (ele) => {
+        console.log(joined, "joined")
+        setChannelData(ele)
+        for (const channel of joinedChannels) {
+            if (channel.channelName === ele.channelName) {
+                console.log(true);
+                setJoined(true);
+                break;
+            } else {
+                setJoined(false);
+            }
+        }
+
+
+        console.log(joined, "joined")
+    }
+
     return (
         <div className="h-screen bg-[#f8f8f8] flex gap-4 flex-col md:flex-row p-4">
 
@@ -27,9 +45,8 @@ export const Dashboard = () => {
                         allChannels.map((ele) => (
 
                             <div key={ele._id}
-                                onClick={() => { setChannelData(ele) }}
+                                onClick={() => channelClickHandler(ele)}
                                 className="cursor-pointer rounded-md bg-blue-400 px-3 py-2 text-center text-white font-semibold">
-                                {console.log("hello")}
                                 {ele.channelName}
                             </div>
                         ))
@@ -37,9 +54,6 @@ export const Dashboard = () => {
                         <div>No Channels found</div>
                     )}
                 </div>
-
-
-
 
             </div>
 

@@ -4,11 +4,36 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SendIcon from "@mui/icons-material/Send"
 import GroupsIcon from '@mui/icons-material/Groups';
 import { UserDataContext } from '../context/UserDataContext';
+import { config } from '../config';
 
 export const ActiveChat = () => {
-    const [joined, setjoined] = useState(true)
 
-    const { channelData } = useContext(UserDataContext)
+
+    const { channelData, joined, setJoined } = useContext(UserDataContext)
+
+    const joinChannelHandler = async () => {
+
+        try {
+            const response = await fetch(`${config.BACKEND_URL}/api/channels/join-channel`, {
+                method: "POST",
+                body: JSON.stringify({ userId: localStorage.getItem('id'), channelId: channelData._id }),
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    "Content-Type": "application/json"
+
+                },
+            })
+
+            const data = await response.json();
+            console.log(data)
+
+            setJoined(true)
+
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
 
     const handleSendMessage = (e) => {
     }
@@ -50,7 +75,7 @@ export const ActiveChat = () => {
                         }
                     }}
                     placeholder='Type your message...'
-                />) : (<button className="text-lg font-medium text-white bg-blue-900 rounded-xl px-4 py-3 w-full cursor-pointer self-center">Join </button>)}
+                />) : (<button onClick={joinChannelHandler} className="text-lg font-medium text-white bg-blue-900 rounded-xl px-4 py-3 w-full cursor-pointer self-center">Join </button>)}
             </div>
         </div>
     )

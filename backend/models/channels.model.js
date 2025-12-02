@@ -7,8 +7,8 @@ const ChannelSchema = new mongoose.Schema({
         unique: true
     },
     members: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+        type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+        default: []
     },
     admin: {
         type: mongoose.Schema.Types.ObjectId,

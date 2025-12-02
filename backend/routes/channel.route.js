@@ -13,5 +13,11 @@ router.post('/get-my-channels', authMiddleware.authMiddleware,
 router.get('/get-all-channels', authMiddleware.authMiddleware,
     channelController.getAllChannels
 )
+router.post('/get-joined-channels', authMiddleware.authMiddleware,
+    channelController.getUserJoinedChannels
+)
+router.post('/join-channel', authMiddleware.authMiddleware,
+    channelController.joinChannel
+)
 
 module.exports = router
