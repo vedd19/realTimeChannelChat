@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Modal from "react-modal";
 import { config } from "../config";
+import { UserDataContext } from "../context/UserDataContext";
 
 Modal.setAppElement('#root');
 
 export const CreateChannelModal = ({ isOpen, setIsOpen, setAllChannels, setJoinedChannels }) => {
 
     const [value, setValue] = useState("");
+    const { joined, setJoined, setMyChannels } = useContext(UserDataContext)
 
     const handleCreate = async () => {
         if (!value.trim()) {
@@ -57,12 +59,12 @@ export const CreateChannelModal = ({ isOpen, setIsOpen, setAllChannels, setJoine
                         const allChannelsData = await allChannelsResponse.json();
                         console.log("Updated all channels:", allChannelsData.data);
 
-                        if (typeof setAllChannels === 'function') {
-                            setAllChannels(allChannelsData.data);
-                        }
+
+                        setAllChannels(allChannelsData.data);
+
                     }
 
-                    // Also refetch joined channels to include the newly created channel
+
                     const joinedChannelsResponse = await fetch(`${config.BACKEND_URL}/api/channels/get-joined-channels`, {
                         method: 'POST',
                         headers: {
@@ -76,9 +78,9 @@ export const CreateChannelModal = ({ isOpen, setIsOpen, setAllChannels, setJoine
                         const joinedChannelsData = await joinedChannelsResponse.json();
                         console.log("Updated joined channels:", joinedChannelsData.data);
 
-                        if (typeof setJoinedChannels === 'function') {
-                            setJoinedChannels(joinedChannelsData.data);
-                        }
+
+                        setJoinedChannels(joinedChannelsData.data);
+
                     }
 
                     alert("Channel created successfully!");

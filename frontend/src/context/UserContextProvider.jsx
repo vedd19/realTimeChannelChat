@@ -53,7 +53,7 @@ export const UserContextProvider = ({ children }) => {
                 if (response.status === 200) {
                     const data = await response.json();
                     setMyChannels(data.data)
-                    console.log(data.data)
+                    console.log(data.data, "mychannels")
                 }
 
             } catch (err) {
