@@ -13,6 +13,10 @@ const MessageSchema = new mongoose.Schema({
             },
             content: {
                 type: String,
+            },
+            senderName: {
+                type: String,
+                default: "Unknown User"
             }
         }],
         default: [],

@@ -4,6 +4,8 @@ const userModel = require('../models/user.model')
 module.exports.authMiddleware = async (req, res, next) => {
     const token = req.cookies?.accessToken || req.headers.authorization?.split(" ")[1];
 
+    // console.log(token, "from auth middleare")
+
     if (!token) {
         return res.status(401).json({
             "success": false,

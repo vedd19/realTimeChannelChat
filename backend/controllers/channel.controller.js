@@ -101,6 +101,7 @@ module.exports.joinChannel = async (req, res) => {
     try {
         const channel = await ChannelModel.findByIdAndUpdate(channelId,
             { $push: { members: userId } },
+            { new: true }
         )
         console.log(channel)
 
@@ -111,8 +112,27 @@ module.exports.joinChannel = async (req, res) => {
     } catch (err) {
         return res.status(400).json({ message: 'error while joining channel' })
     }
+}
 
+module.exports.leaveChannel = async (req, res) => {
+    const { userId, channelId } = req.body;
+    console.log("Leaving channel:", channelId, "User:", userId)
+    try {
+        const channel = await ChannelModel.findByIdAndUpdate(channelId,
+            { $pull: { members: userId } },
+            { new: true }
+        )
+        console.log("User left channel:", channel)
 
+        res.status(200).json({
+            success: true,
+            data: channel,
+            message: 'left channel successfully'
+        })
 
+    } catch (err) {
+        console.log("Error leaving channel:", err)
+        return res.status(400).json({ message: 'error while leaving channel' })
+    }
 }
 

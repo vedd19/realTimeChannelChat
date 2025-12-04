@@ -8,32 +8,33 @@ import { Register } from './pages/Register.jsx'
 import { Dashboard } from './pages/Dashboard.jsx'
 import { SnackbarProvider } from 'notistack'
 import UserContextProvider from './context/UserContextProvider.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
+import { SocketProvider } from './context/SocketProvider.jsx'
 
 const router = createBrowserRouter([
   {
     path: '/',
     element:
-      <UserContextProvider>
-        <SnackbarProvider>
-          <App />
-        </SnackbarProvider>
-      </UserContextProvider>,
-    children: [{
-      path: '/',
-      element: <App />
-    },
-    {
-      path: '/login',
-      element: <Login />
-    },
-    {
-      path: '/register',
-      element: <Register />
-    },
-    {
-      path: '/dashboard',
-      element: <Dashboard />
-    }
+      <SocketProvider>
+        <UserContextProvider>
+          <SnackbarProvider>
+            <App />
+          </SnackbarProvider>
+        </UserContextProvider>
+      </SocketProvider>,
+    children: [
+      {
+        path: '/login',
+        element: <Login />
+      },
+      {
+        path: '/register',
+        element: <Register />
+      },
+      {
+        path: '/',
+        element: <ProtectedRoute><Dashboard /></ProtectedRoute>
+      }
     ],
   }
 ])

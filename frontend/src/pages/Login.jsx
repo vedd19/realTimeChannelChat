@@ -61,7 +61,7 @@ export const Login = () => {
                 localStorage.setItem('username', data.data.user.username);
                 localStorage.setItem('id', data.data.user._id);
                 enqueueSnackbar("Login successful", { variant: "success" });
-                navigate('/dashboard')
+                navigate('/')
             }
             else {
                 enqueueSnackbar(data.message, {

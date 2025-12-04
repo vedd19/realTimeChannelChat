@@ -4,6 +4,8 @@ import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { config } from '../config';
 import axios from 'axios';
+import { SocketContext } from './socketContext';
+import { useContext } from 'react';
 // import { config } from '../src/config';
 
 export const UserContextProvider = ({ children }) => {
@@ -26,6 +28,12 @@ export const UserContextProvider = ({ children }) => {
     const [channelData, setChannelData] = useState(null)
     const [joinedChannels, setJoinedChannels] = useState(null)
     const [joined, setJoined] = useState(false);
+    const [messages, setMessages] = useState([])
+    const [otherUserName, setOtherUserName] = useState("")
+    const [recievedMsg, setRecievedMsg] = useState("")
+    const [senderId, setSenderId] = useState()
+    // const socketRef.current = useSocket();
+    const { socketRef } = useContext(SocketContext)
 
     useEffect(() => {
 
@@ -113,12 +121,8 @@ export const UserContextProvider = ({ children }) => {
     }, [])
 
 
-
-
-
-
     return (
-        <UserDataContext.Provider value={{ userData, setUserData, loginData, setLoginData, myChannels, allChannels, channelData, setChannelData, joined, setJoined, setMyChannels, joinedChannels, setJoinedChannels }} >
+        <UserDataContext.Provider value={{ userData, setUserData, loginData, setLoginData, myChannels, allChannels, setAllChannels, channelData, setChannelData, joined, setJoined, setMyChannels, joinedChannels, setJoinedChannels, messages, setMessages, otherUserName, setOtherUserName, recievedMsg, setRecievedMsg, senderId, setSenderId }} >
             {children}
         </UserDataContext.Provider>
     )
