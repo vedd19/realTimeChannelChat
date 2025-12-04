@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
         socket.join(channelId);
         socket.channelId = channelId;
         socket.userName = userName;
-        console.log(`Socket ${socket.id} joined channel ${channelId} with user: ${userName}`);
+        // console.log(`Socket ${socket.id} joined channel ${channelId} with user: ${userName}`);
 
 
         const onlineUsers = io.sockets.adapter.rooms.get(channelId);

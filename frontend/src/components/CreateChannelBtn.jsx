@@ -6,7 +6,7 @@ import { UserDataContext } from '../context/UserDataContext';
 export const CreateChannelBtn = () => {
     const [isOpen, setIsOpen] = useState(false);
     const context = useContext(UserDataContext);
-    const { setAllChannels } = context || {};
+    const { setAllChannels, setJoinedChannels } = context || {};
 
     return (
         <div>
@@ -19,7 +19,7 @@ export const CreateChannelBtn = () => {
                 Create Channel
             </Button>
 
-            <CreateChannelModal isOpen={isOpen} setIsOpen={setIsOpen} setAllChannels={setAllChannels} />
+            <CreateChannelModal isOpen={isOpen} setIsOpen={setIsOpen} setAllChannels={setAllChannels} setJoinedChannels={setJoinedChannels} />
         </div>
     )
 }

@@ -4,7 +4,7 @@ import { config } from "../config";
 
 Modal.setAppElement('#root');
 
-export const CreateChannelModal = ({ isOpen, setIsOpen, setAllChannels }) => {
+export const CreateChannelModal = ({ isOpen, setIsOpen, setAllChannels, setJoinedChannels }) => {
 
     const [value, setValue] = useState("");
 
@@ -59,12 +59,30 @@ export const CreateChannelModal = ({ isOpen, setIsOpen, setAllChannels }) => {
 
                         if (typeof setAllChannels === 'function') {
                             setAllChannels(allChannelsData.data);
-                            alert("Channel created successfully!");
-                        } else {
-                            console.error("setAllChannels is not a function after refetch");
-                            alert("Channel created but failed to update UI. Please refresh.");
                         }
                     }
+
+                    // Also refetch joined channels to include the newly created channel
+                    const joinedChannelsResponse = await fetch(`${config.BACKEND_URL}/api/channels/get-joined-channels`, {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                            'Content-type': 'application/json'
+                        },
+                        body: JSON.stringify({ userId: localStorage.getItem('id') })
+                    });
+
+                    if (joinedChannelsResponse.status === 200) {
+                        const joinedChannelsData = await joinedChannelsResponse.json();
+                        console.log("Updated joined channels:", joinedChannelsData.data);
+
+                        if (typeof setJoinedChannels === 'function') {
+                            setJoinedChannels(joinedChannelsData.data);
+                        }
+                    }
+
+                    alert("Channel created successfully!");
+
                 } catch (fetchError) {
                     console.error("Error fetching updated channels:", fetchError);
                     alert("Channel created but failed to fetch updated list: " + fetchError.message);
